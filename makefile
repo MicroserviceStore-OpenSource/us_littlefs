@@ -95,7 +95,8 @@ LD_FLAGS := \
 	-Wl,-defsym=MICROSERVICE_MAINSTACK_SIZE=$(uSERVICE_MAINSTACK_SIZE) \
 
 SOURCE_FILES_USERLIB := \
-	Source/UserLib/UserLib.c
+	Source/UserLib/UserLib.c \
+	Source/us_std.c
 
 INCLUDE_DIRS_USERLIB := \
 	$(INCLUDE_DIRS)

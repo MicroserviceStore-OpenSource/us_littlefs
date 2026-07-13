@@ -1,0 +1,32 @@
+From 366e01cebd7a838cded42d7e30937938f11c21f1 Mon Sep 17 00:00:00 2001
+From: DEV | Microservice Store <dev@microservicestore.com>
+Date: Thu, 16 Jul 2026 19:42:15 +0100
+Subject: [PATCH] Microservice Changes
+
+---
+ lfs_util.h | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/lfs_util.h b/lfs_util.h
+index c1999fa9..082136d4 100644
+--- a/lfs_util.h
++++ b/lfs_util.h
+@@ -57,6 +57,15 @@
+ #include <stdio.h>
+ #endif
+ 
++/* Microservice Modification. No Standard Library */
++#define memcpy      us_memcpy
++#define memset      us_memset
++#define memcmp      us_memcmp
++
++extern void us_memcpy(void* destination, const void* source, size_t length);
++extern void us_memset(void* destination, uint8_t value, size_t length);
++extern int us_memcmp(const void* ptr1, const void* ptr2, size_t length);
++
+ #ifdef __cplusplus
+ extern "C"
+ {
+-- 
+2.48.1.windows.1
+

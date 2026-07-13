@@ -1,82 +1,116 @@
-/*
- * @file us_Internal.h
- *
- * @brief Microservice Internal Definitions
- *
- ******************************************************************************/
-
 #ifndef __US_INTERNAL_H
 #define __US_INTERNAL_H
 
-/********************************* INCLUDES ***********************************/
-
 #include "uService.h"
 
-/***************************** MACRO DEFINITIONS ******************************/
+#include "us-littlefs.h"
 
-/***************************** TYPE DEFINITIONS *******************************/
+#include "littlefs/lfs.h"
 
+/*
+ * Operations supported by this Microservice.
+ */
 typedef enum
 {
-    /*
-     * List of Operations
-     *  - AI Generated ("us_operations.inc" below)
-     *  - or, Manually Add below
-     */
-#ifdef US_AI_GENERATED    
-    #include "us_operations.inc"
-#else /* US_AI_GENERATED */
-    usOp_Sum
-#endif /* US_AI_GENERATED */
+    usOp_format = 0,
+    usOp_mount,
+    usOp_unmount,
+    usOp_file_open,
+    usOp_file_write,
+    usOp_file_read,
+    usOp_file_close,
+    usOp_remove
 } usOperations;
 
+/*
+ * Request Package
+ */
 typedef struct
 {
     uServicePackageHeader header;
 
     union
     {
-        /*
-        * List of Inputs of Each Operation defined in usOperations
-        *  - AI Generated ("us_operation_inputs.inc" below)
-        *  - or, Manually Add below
-        */
-#ifdef US_AI_GENERATED
-        #include "us_operation_inputs.inc"
-#else /* US_AI_GENERATED */
-    struct
-    {
-        int32_t a;
-        int32_t b;
-    } sum;
-#endif /* US_AI_GENERATED */
+        /* usOp_format    : no input */
+        /* usOp_mount     : no input */
+        /* usOp_unmount   : no input */
+
+        struct
+        {
+            char path[US_LITTLEFS_MAX_PATH];
+            int flags;
+        } file_open;
+
+        struct
+        {
+            uint8_t buffer[US_LITTLEFS_MAX_DATA];
+            uint32_t size;
+        } file_write;
+
+        struct
+        {
+            uint32_t size;
+        } file_read;
+
+        /* usOp_file_close : no input */
+
+        struct
+        {
+            char path[US_LITTLEFS_MAX_PATH];
+        } remove;
     } payload;
 } usRequestPackage;
 
+/*
+ * Response Package
+ */
 typedef struct
 {
     uServicePackageHeader header;
 
     union
     {
-        /*
-        * List of Outputs of Each Operation defined in usOperations
-        *  - AI Generated ("us_operation_outputs.inc" below)
-        *  - or, Manually Add below
-        */
-#ifdef US_AI_GENERATED
-        #include "us_operation_outputs.inc"
-#else /* US_AI_GENERATED */
-    struct
-    {
-        int32_t result;
-    } sum;
-#endif /* US_AI_GENERATED */
+        struct
+        {
+            int result;
+        } format;
+
+        struct
+        {
+            int result;
+        } mount;
+
+        struct
+        {
+            int result;
+        } unmount;
+
+        struct
+        {
+            int result;
+        } file_open;
+
+        struct
+        {
+            int result;
+        } file_write;
+
+        struct
+        {
+            int result;
+            uint8_t buffer[US_LITTLEFS_MAX_DATA];
+        } file_read;
+
+        struct
+        {
+            int result;
+        } file_close;
+
+        struct
+        {
+            int result;
+        } remove;
     } payload;
 } usResponsePackage;
-
-/**************************** FUNCTION PROTOTYPES *****************************/
-
-/******************************** VARIABLES ***********************************/
 
 #endif /* __US_INTERNAL_H */
